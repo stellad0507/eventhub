@@ -39,3 +39,9 @@ The API is then available at `http://127.0.0.1:8000/api/`. Every request is logg
 Seat deduction happens inside `ReservationSerializer.create()`, next to the creation of the `Reservation`. Validation (`validate()`) checks event status and seat availability first. This keeps the rule "a reservation exists if and only if its seats were deducted" in a single place, instead of splitting it between the view and the serializer.
 
 The trade-off is concurrency: two simultaneous requests for the last seat could both pass validation. A production system would wrap the check and write in `transaction.atomic()` with `select_for_update()` on the event row. I kept it out here as the brief scopes it out.
+
+## Postman screenshots
+
+1. Successful reservation (201 Created): ![201](screenshots/01-reservation-201.jpeg)
+2. Overbooking failure (400 Bad Request): ![400](screenshots/02-overbooking-400.jpeg)
+3. Successful cancellation: ![cancel](screenshots/03-cancellation-200.jpeg)
